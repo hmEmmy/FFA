@@ -1,7 +1,7 @@
 package me.emmy.tulip.visual.scoreboard;
 
 import me.emmy.tulip.Tulip;
-import me.emmy.tulip.config.ConfigHandler;
+import me.emmy.tulip.config.ConfigService;
 import me.emmy.tulip.profile.Profile;
 import me.emmy.tulip.profile.enums.EnumProfileState;
 import me.emmy.tulip.util.BukkitReflection;
@@ -16,13 +16,13 @@ import java.util.List;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 27/07/2024 - 17:42
  */
 public class ScoreboardVisualizer implements AssembleAdapter {
     @Override
     public String getTitle(Player player) {
-        return CC.translate(ConfigHandler.getInstance().getScoreboardConfig().getString("scoreboard.title"));
+        return CC.translate(ConfigService.getInstance().getScoreboardConfig().getString("scoreboard.title"));
     }
 
     @Override
@@ -32,35 +32,35 @@ public class ScoreboardVisualizer implements AssembleAdapter {
         DecimalFormat decimalFormat = new DecimalFormat("0.0");
 
         if (profile == null) {
-            for (String line : ConfigHandler.getInstance().getScoreboardConfig().getStringList("scoreboard.failed")) {
+            for (String line : ConfigService.getInstance().getScoreboardConfig().getStringList("scoreboard.failed")) {
                 list.add(CC.translate(line).replace("{sidebar}", "&7&m------------------"));
             }
             return list;
         }
 
-        if (profile.getSettings().isShowScoreboard()) {
+        if (profile.getSettingsData().isShowScoreboard()) {
             if (profile.getState() == EnumProfileState.FFA) {
-                for (String line : ConfigHandler.getInstance().getScoreboardConfig().getStringList("scoreboard.lines.in-game")) {
+                for (String line : ConfigService.getInstance().getScoreboardConfig().getStringList("scoreboard.lines.in-game")) {
                     list.add(CC.translate(line)
                             .replace("{sidebar}", "&7&m------------------")
                             .replace("{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                            .replace("{kit}", String.valueOf(Tulip.getInstance().getFfaRepository().getFFAMatch(player).getKit().getName()))
+                            .replace("{kit}", String.valueOf(Tulip.getInstance().getGameRepository().getFFAMatch(player).getKit().getName()))
                             .replace("{ping}", String.valueOf(BukkitReflection.getPing(player)))
-                            .replace("{players}", String.valueOf(profile.getFfaMatch().getPlayers().size()))
-                            .replace("{ks}", String.valueOf(profile.getStats().getHighestKillstreak(profile.getFfaMatch().getKit())))
-                            .replace("{kills}", String.valueOf(profile.getStats().getKitKills(profile.getFfaMatch().getKit())))
-                            .replace("{deaths}", String.valueOf(profile.getStats().getKitDeaths(profile.getFfaMatch().getKit())))
+                            .replace("{players}", String.valueOf(profile.getGame().getPlayers().size()))
+                            .replace("{ks}", String.valueOf(profile.getStatsData().getCurrentKillstreak().get(profile.getGame().getKit())))
+                            .replace("{kills}", String.valueOf(profile.getStatsData().getKitKills(profile.getGame().getKit())))
+                            .replace("{deaths}", String.valueOf(profile.getStatsData().getKitDeaths(profile.getGame().getKit())))
                             .replace("{max-online}", String.valueOf(Bukkit.getMaxPlayers()))
                     );
                 }
             } else {
-                for (String line : ConfigHandler.getInstance().getScoreboardConfig().getStringList("scoreboard.lines.spawn")) {
+                for (String line : ConfigService.getInstance().getScoreboardConfig().getStringList("scoreboard.lines.spawn")) {
                     list.add(CC.translate(line)
                             .replace("{sidebar}", "&7&m------------------")
                             .replace("{online}", String.valueOf(Bukkit.getOnlinePlayers().size()))
-                            .replace("{kills}", String.valueOf(profile.getStats().getTotalKills()))
-                            .replace("{deaths}", String.valueOf(profile.getStats().getTotalDeaths()))
-                            .replace("{KDR}", decimalFormat.format(profile.getStats().getKDR()))
+                            .replace("{kills}", String.valueOf(profile.getStatsData().getTotalKills()))
+                            .replace("{deaths}", String.valueOf(profile.getStatsData().getTotalDeaths()))
+                            .replace("{KDR}", decimalFormat.format(profile.getStatsData().getKDR()))
                             .replace("{max-online}", String.valueOf(Bukkit.getMaxPlayers()))
                     );
                 }

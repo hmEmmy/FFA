@@ -6,7 +6,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import lombok.Getter;
-import me.emmy.tulip.config.ConfigHandler;
+import me.emmy.tulip.config.ConfigService;
 import me.emmy.tulip.util.CC;
 import me.emmy.tulip.util.ServerUtil;
 import org.bukkit.Bukkit;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 27/07/2024 - 15:27
  */
 @Getter
@@ -30,7 +30,7 @@ public class MongoService {
      */
     public void startMongo() {
         try {
-            FileConfiguration config = ConfigHandler.getInstance().getSettingsConfig();
+            FileConfiguration config = ConfigService.getInstance().getSettingsConfig();
 
             String databaseName = config.getString("mongo.database");
             Bukkit.getConsoleSender().sendMessage(CC.translate("&6Connecting to the MongoDB database..."));

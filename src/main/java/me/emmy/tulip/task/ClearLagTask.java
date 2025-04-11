@@ -8,7 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 07/09/2024 - 15:10
  */
 public class ClearLagTask extends BukkitRunnable {

@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 26/07/2024 - 21:30
  */
 @UtilityClass

@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 07/09/2024 - 15:17
  */
 public interface ITablist {

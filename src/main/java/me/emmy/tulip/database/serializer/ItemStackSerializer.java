@@ -11,7 +11,7 @@ import java.util.Base64;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 10/08/2024 - 22:11
  */
 @UtilityClass

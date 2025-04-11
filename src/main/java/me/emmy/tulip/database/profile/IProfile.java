@@ -4,7 +4,7 @@ import me.emmy.tulip.profile.Profile;
 
 /**
  * @author Remi
- * @project Tulip
+ * @project FFA
  * @date 6/23/2024
  */
 public interface IProfile {

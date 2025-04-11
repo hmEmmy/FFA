@@ -1,8 +1,8 @@
 package me.emmy.tulip.profile.listener;
 
 import me.emmy.tulip.Tulip;
-import me.emmy.tulip.config.ConfigHandler;
-import me.emmy.tulip.hotbar.HotbarUtility;
+import me.emmy.tulip.config.ConfigService;
+import me.emmy.tulip.feature.hotbar.HotbarUtility;
 import me.emmy.tulip.profile.Profile;
 import me.emmy.tulip.profile.ProfileRepository;
 import me.emmy.tulip.profile.enums.EnumProfileState;
@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 27/07/2024 - 18:38
  */
 public class ProfileListener implements Listener {
@@ -44,16 +44,19 @@ public class ProfileListener implements Listener {
         ProfileRepository profileRepository = Tulip.getInstance().getProfileRepository();
         Profile profile = profileRepository.getProfile(player.getUniqueId());
         profile.setName(player.getName());
-        profile.setOnline(true);
         profile.setState(EnumProfileState.SPAWN);
+
+        if (profile.isFirstJoin()) {
+            this.sendWelcomeMessage("first-join-message", player);
+        } else {
+            this.sendWelcomeMessage("welcome-message", player);
+        }
 
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
         Tulip.getInstance().getSpawnHandler().teleportToSpawn(player);
         player.getInventory().setHeldItemSlot(0);
         HotbarUtility.applyHotbarItems(player);
-
-        sendWelcomeMessage(player);
 
         if (player.isOp()) {
             player.setAllowFlight(true);
@@ -63,23 +66,22 @@ public class ProfileListener implements Listener {
         event.setJoinMessage(null);
     }
 
-
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         Profile profile = Tulip.getInstance().getProfileRepository().getProfile(player.getUniqueId());
-        profile.setOnline(false);
         profile.saveProfile();
         event.setQuitMessage(null);
     }
 
     /**
-     * Send the welcome message to the player.
+     * Sends a welcome message to the player.
      *
-     * @param player the player
+     * @param path   The path in the config file for the message.
+     * @param player The player to send the message to.
      */
-    private void sendWelcomeMessage(Player player) {
-        List<String> messages = ConfigHandler.getInstance().getLocaleConfig().getStringList("welcome-message");
+    private void sendWelcomeMessage(String path, Player player) {
+        List<String> messages = ConfigService.getInstance().getLocaleConfig().getStringList(path);
         for (String message : messages) {
             player.sendMessage(CC.translate(message).replace("{player}", player.getName()));
         }

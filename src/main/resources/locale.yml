@@ -8,6 +8,17 @@ welcome-message:
   - " &e&l● &eTo change kit layout, &dright click your book."
   - ""
 
+first-join-message:
+    - ""
+    - "&e&lWelcome to FFA!"
+    - " &7Upon first join, every player receives 1000 coins!"
+    - ""
+    - "&e&l● &eTo play, &dright click you sword."
+    - "&e&l● &eTo change kit layout, &dright click your book."
+    - ""
+    - "&eEnjoy your stay, &d{player}!"
+    - ""
+
 spawn:
   set: "&aSuccessfully set the &bspawn &alocation."
   teleported: "&aTeleported you to the &bspawn &alocation."

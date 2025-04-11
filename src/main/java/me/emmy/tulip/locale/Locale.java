@@ -1,7 +1,7 @@
 package me.emmy.tulip.locale;
 
 import lombok.Getter;
-import me.emmy.tulip.config.ConfigHandler;
+import me.emmy.tulip.config.ConfigService;
 import me.emmy.tulip.util.CC;
 import org.bukkit.ChatColor;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 21/08/2024 - 20:19
  */
 @Getter
@@ -76,7 +76,7 @@ public enum Locale {
      * @return the string and the config
      */
     public String getStringPath() {
-        return CC.translate(ConfigHandler.getInstance().getConfig(config).getString(string));
+        return CC.translate(ConfigService.getInstance().getConfig(config).getString(string));
     }
 
     /**
@@ -85,7 +85,7 @@ public enum Locale {
      * @return the string list and the config
      */
     public List<String> getStringListPath() {
-        return ConfigHandler.getInstance().getConfig(config).getStringList(string);
+        return ConfigService.getInstance().getConfig(config).getStringList(string);
     }
 
     /**
@@ -94,7 +94,7 @@ public enum Locale {
      * @return the boolean and the config
      */
     public boolean getBooleanPath() {
-        return ConfigHandler.getInstance().getConfig(config).getBoolean(string);
+        return ConfigService.getInstance().getConfig(config).getBoolean(string);
     }
 
     /**
@@ -103,7 +103,7 @@ public enum Locale {
      * @return the integer and the config
      */
     public int getIntPath() {
-        return ConfigHandler.getInstance().getConfig(config).getInt(string);
+        return ConfigService.getInstance().getConfig(config).getInt(string);
     }
 
     /**
@@ -112,7 +112,7 @@ public enum Locale {
      * @return the double and the config
      */
     public double getDoublePath() {
-        return ConfigHandler.getInstance().getConfig(config).getDouble(string);
+        return ConfigService.getInstance().getConfig(config).getDouble(string);
     }
 
     /**
@@ -121,7 +121,7 @@ public enum Locale {
      * @return the long and the config
      */
     public long getLongPath() {
-        return ConfigHandler.getInstance().getConfig(config).getLong(string);
+        return ConfigService.getInstance().getConfig(config).getLong(string);
     }
 
     /**
@@ -130,6 +130,6 @@ public enum Locale {
      * @return the color and the config
      */
     public ChatColor getColorPath() {
-        return ChatColor.valueOf(String.valueOf(ConfigHandler.getInstance().getConfig(config).getColor(string)));
+        return ChatColor.valueOf(String.valueOf(ConfigService.getInstance().getConfig(config).getColor(string)));
     }
 }

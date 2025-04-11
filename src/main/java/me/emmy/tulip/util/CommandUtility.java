@@ -1,42 +1,42 @@
 package me.emmy.tulip.util;
 
 import lombok.experimental.UtilityClass;
-import me.emmy.tulip.arena.command.ArenaCommand;
-import me.emmy.tulip.arena.command.impl.*;
-import me.emmy.tulip.command.admin.GamemodeCommand;
-import me.emmy.tulip.command.admin.ReloadCommand;
-import me.emmy.tulip.command.global.TulipCommand;
-import me.emmy.tulip.config.ConfigHandler;
-import me.emmy.tulip.ffa.command.admin.FFACommand;
-import me.emmy.tulip.ffa.command.admin.impl.*;
-import me.emmy.tulip.ffa.command.player.JoinCommand;
-import me.emmy.tulip.ffa.command.player.LeaveCommand;
-import me.emmy.tulip.ffa.command.player.PlayCommand;
-import me.emmy.tulip.hotbar.command.HotbarItemsCommand;
-import me.emmy.tulip.hotbar.command.RemoveHotbarItemsCommand;
-import me.emmy.tulip.kit.command.KitCommand;
-import me.emmy.tulip.kit.command.impl.*;
-import me.emmy.tulip.profile.coins.command.CoinsCommand;
-import me.emmy.tulip.profile.coins.command.impl.CoinsDonateCommand;
-import me.emmy.tulip.profile.coins.command.impl.CoinsRequestCommand;
-import me.emmy.tulip.profile.coins.command.impl.CoinsSetCommand;
-import me.emmy.tulip.profile.kitlayout.command.KitLayoutCommand;
-import me.emmy.tulip.profile.settings.command.SettingsCommand;
-import me.emmy.tulip.profile.settings.command.toggle.ToggleScoreboardCommand;
-import me.emmy.tulip.profile.settings.command.toggle.ToggleTablistCommand;
-import me.emmy.tulip.profile.stats.command.StatsCommand;
-import me.emmy.tulip.profile.stats.command.admin.ResetStatsCommand;
-import me.emmy.tulip.profile.stats.command.admin.add.AddDeathsCommand;
-import me.emmy.tulip.profile.stats.command.admin.add.AddKillsCommand;
-import me.emmy.tulip.profile.stats.command.admin.set.SetDeathsCommand;
-import me.emmy.tulip.profile.stats.command.admin.set.SetKillsCommand;
-import me.emmy.tulip.shop.command.ShopCommand;
-import me.emmy.tulip.spawn.command.SetSpawnCommand;
-import me.emmy.tulip.spawn.command.SpawnCommand;
+import me.emmy.tulip.command.ReloadCommand;
+import me.emmy.tulip.command.TulipCommand;
+import me.emmy.tulip.config.ConfigService;
+import me.emmy.tulip.feature.arena.command.ArenaCommand;
+import me.emmy.tulip.feature.arena.command.impl.*;
+import me.emmy.tulip.feature.hotbar.command.HotbarItemsCommand;
+import me.emmy.tulip.feature.hotbar.command.RemoveHotbarItemsCommand;
+import me.emmy.tulip.feature.kit.command.KitCommand;
+import me.emmy.tulip.feature.kit.command.impl.*;
+import me.emmy.tulip.feature.shop.command.ShopCommand;
+import me.emmy.tulip.feature.spawn.command.SetSpawnCommand;
+import me.emmy.tulip.feature.spawn.command.SpawnCommand;
+import me.emmy.tulip.game.command.admin.FFACommand;
+import me.emmy.tulip.game.command.admin.impl.*;
+import me.emmy.tulip.game.command.player.JoinCommand;
+import me.emmy.tulip.game.command.player.LeaveCommand;
+import me.emmy.tulip.game.command.player.PlayCommand;
+import me.emmy.tulip.profile.command.BuildModeCommand;
+import me.emmy.tulip.profile.data.coins.command.CoinsCommand;
+import me.emmy.tulip.profile.data.coins.command.impl.CoinsDonateCommand;
+import me.emmy.tulip.profile.data.coins.command.impl.CoinsRequestCommand;
+import me.emmy.tulip.profile.data.coins.command.impl.CoinsSetCommand;
+import me.emmy.tulip.profile.data.kitlayout.command.KitLayoutCommand;
+import me.emmy.tulip.profile.data.settings.command.SettingsCommand;
+import me.emmy.tulip.profile.data.settings.command.toggle.ToggleScoreboardCommand;
+import me.emmy.tulip.profile.data.settings.command.toggle.ToggleTablistCommand;
+import me.emmy.tulip.profile.data.stats.command.StatsCommand;
+import me.emmy.tulip.profile.data.stats.command.admin.ResetStatsCommand;
+import me.emmy.tulip.profile.data.stats.command.admin.add.AddDeathsCommand;
+import me.emmy.tulip.profile.data.stats.command.admin.add.AddKillsCommand;
+import me.emmy.tulip.profile.data.stats.command.admin.set.SetDeathsCommand;
+import me.emmy.tulip.profile.data.stats.command.admin.set.SetKillsCommand;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 28/09/2024 - 09:05
  */
 @UtilityClass
@@ -76,7 +76,6 @@ public class CommandUtility {
      * Register the admin commands.
      */
     private void registerAdminCommands() {
-        new GamemodeCommand();
         new ReloadCommand();
     }
 
@@ -101,7 +100,7 @@ public class CommandUtility {
         new FFAListPlayersCommand();
         new FFASetMaxPlayersCommand();
 
-        if (ConfigHandler.getInstance().getSettingsConfig().getBoolean("commands.ffa-join")) {
+        if (ConfigService.getInstance().getSettingsConfig().getBoolean("commands.ffa-join")) {
             new JoinCommand();
         }
         new LeaveCommand();
@@ -137,6 +136,7 @@ public class CommandUtility {
      * Register the profile commands.
      */
     private void registerProfileCommands() {
+        new BuildModeCommand();
         //admin
         new AddDeathsCommand();
         new AddKillsCommand();

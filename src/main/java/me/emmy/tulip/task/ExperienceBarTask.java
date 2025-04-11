@@ -1,8 +1,8 @@
 package me.emmy.tulip.task;
 
 import me.emmy.tulip.Tulip;
-import me.emmy.tulip.cooldown.Cooldown;
-import me.emmy.tulip.cooldown.CooldownRepository;
+import me.emmy.tulip.feature.cooldown.Cooldown;
+import me.emmy.tulip.feature.cooldown.CooldownRepository;
 import me.emmy.tulip.util.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 08/09/2024 - 23:19
  */
 public class ExperienceBarTask extends BukkitRunnable {

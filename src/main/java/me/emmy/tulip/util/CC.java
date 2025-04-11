@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 26/07/2024 - 21:30
  */
 @UtilityClass
@@ -65,7 +65,7 @@ public class CC {
 //                "",
                 "  Kits: &d" + Tulip.getInstance().getKitRepository().getKits().size(),
                 "  Arenas: &d" + Tulip.getInstance().getArenaRepository().getArenas().size(),
-                "  FFA Arenas: &d" + Tulip.getInstance().getFfaRepository().getMatches().size(),
+                "  FFA Arenas: &d" + Tulip.getInstance().getGameRepository().getMatches().size(),
                 "",
                 "}",
                 "",

@@ -3,13 +3,12 @@ package me.emmy.tulip.profile;
 import lombok.Getter;
 import lombok.Setter;
 import me.emmy.tulip.Tulip;
-import me.emmy.tulip.ffa.AbstractFFAMatch;
-import me.emmy.tulip.product.Product;
-import me.emmy.tulip.profile.coins.ProfileCoins;
+import me.emmy.tulip.game.AbstractGame;
+import me.emmy.tulip.profile.data.coins.ProfileCoins;
 import me.emmy.tulip.profile.enums.EnumProfileState;
-import me.emmy.tulip.profile.kitlayout.ProfileKitLayout;
-import me.emmy.tulip.profile.settings.ProfileSettings;
-import me.emmy.tulip.profile.stats.ProfileStats;
+import me.emmy.tulip.profile.data.kitlayout.ProfileKitLayout;
+import me.emmy.tulip.profile.data.settings.ProfileSettings;
+import me.emmy.tulip.profile.data.stats.ProfileStats;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -18,24 +17,25 @@ import java.util.UUID;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 27/07/2024 - 18:26
  */
 @Getter
 @Setter
 public class Profile {
-    private String name;
     private UUID uuid;
+    private String name;
 
-    private boolean online;
+    private boolean firstJoin;
+    private boolean buildMode;
 
-    private AbstractFFAMatch ffaMatch;
+    private AbstractGame game;
     private EnumProfileState state;
 
-    private ProfileStats stats;
-    private ProfileSettings settings;
-    private ProfileKitLayout kitLayout;
-    private ProfileCoins coins;
+    private ProfileStats statsData;
+    private ProfileSettings settingsData;
+    private ProfileKitLayout kitLayoutData;
+    private ProfileCoins coinsData;
     private List<String> ownedProducts;
 
     /**
@@ -46,11 +46,12 @@ public class Profile {
     public Profile(UUID uuid) {
         this.uuid = uuid;
         this.name = Bukkit.getOfflinePlayer(this.uuid).getName();
-        this.online = false;
-        this.stats = new ProfileStats();
-        this.settings = new ProfileSettings();
-        this.kitLayout = new ProfileKitLayout();
-        this.coins = new ProfileCoins(100);
+        this.firstJoin = true;
+        this.buildMode = false;
+        this.statsData = new ProfileStats();
+        this.settingsData = new ProfileSettings();
+        this.kitLayoutData = new ProfileKitLayout();
+        this.coinsData = new ProfileCoins(1000);
         this.ownedProducts = new ArrayList<>();
     }
 

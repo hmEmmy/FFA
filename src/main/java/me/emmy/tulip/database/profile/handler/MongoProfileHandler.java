@@ -5,9 +5,9 @@ import com.mongodb.client.model.ReplaceOptions;
 import me.emmy.tulip.Tulip;
 import me.emmy.tulip.database.profile.IProfile;
 import me.emmy.tulip.database.serializer.ItemStackSerializer;
-import me.emmy.tulip.ffa.AbstractFFAMatch;
-import me.emmy.tulip.ffa.FFARepository;
-import me.emmy.tulip.kit.Kit;
+import me.emmy.tulip.game.AbstractGame;
+import me.emmy.tulip.game.GameRepository;
+import me.emmy.tulip.feature.kit.Kit;
 import me.emmy.tulip.profile.Profile;
 import org.bson.Document;
 import org.bukkit.inventory.ItemStack;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 27/07/2024 - 18:25
  */
 public class MongoProfileHandler implements IProfile {
@@ -39,13 +39,13 @@ public class MongoProfileHandler implements IProfile {
         }
 
         profile.setName(document.getString("name"));
-        profile.setOnline(document.getBoolean("online"));
-        profile.getCoins().setCoins(document.getInteger("coins"));
+        profile.getCoinsData().setCoins(document.getInteger("coins"));
+        profile.setFirstJoin(document.getBoolean("firstJoin"));
         profile.setOwnedProducts((List<String>) document.get("ownedProducts"));
 
         Document settingsDocument = (Document) document.get("settings");
-        profile.getSettings().setShowScoreboard(settingsDocument.getBoolean("showScoreboard"));
-        profile.getSettings().setShowTablist(settingsDocument.getBoolean("showTablist"));
+        profile.getSettingsData().setShowScoreboard(settingsDocument.getBoolean("showScoreboard"));
+        profile.getSettingsData().setShowTablist(settingsDocument.getBoolean("showTablist"));
 
         this.statsDocumentToProfile(profile, document);
         this.layoutDocumentToProfile(profile, document);
@@ -60,21 +60,21 @@ public class MongoProfileHandler implements IProfile {
         Document document = new Document();
         document.put("uuid", profile.getUuid().toString());
         document.put("name", profile.getName());
-        document.put("online", profile.isOnline());
-        document.put("coins", profile.getCoins().getCoins());
+        document.put("firstJoin", profile.isFirstJoin());
+        document.put("coins", profile.getCoinsData().getCoins());
         document.put("ownedProducts", profile.getOwnedProducts());
 
         Document settingsDocument = new Document();
-        settingsDocument.put("showScoreboard", profile.getSettings().isShowScoreboard());
-        settingsDocument.put("showTablist", profile.getSettings().isShowTablist());
+        settingsDocument.put("showScoreboard", profile.getSettingsData().isShowScoreboard());
+        settingsDocument.put("showTablist", profile.getSettingsData().isShowTablist());
         document.put("settings", settingsDocument);
 
         Document statsDocument = new Document();
 
-        FFARepository ffaRepository = Tulip.getInstance().getFfaRepository();
+        GameRepository gameRepository = Tulip.getInstance().getGameRepository();
         Map<String, Integer> killsMap = new HashMap<>();
         Map<String, Integer> deathsMap = new HashMap<>();
-        Map<String, Integer> highestKillstreakMap = this.statsToDocument(profile, ffaRepository, killsMap, deathsMap);
+        Map<String, Integer> highestKillstreakMap = this.statsToDocument(profile, gameRepository, killsMap, deathsMap);
 
         statsDocument.put("kills", killsMap);
         statsDocument.put("deaths", deathsMap);
@@ -133,9 +133,9 @@ public class MongoProfileHandler implements IProfile {
                 }
             }
 
-            profile.getStats().setKitKills(kitKills);
-            profile.getStats().setKitDeaths(kitDeaths);
-            profile.getStats().setHighestKillstreak(highestKillstreak);
+            profile.getStatsData().setKitKills(kitKills);
+            profile.getStatsData().setKitDeaths(kitDeaths);
+            profile.getStatsData().setHighestKillstreak(highestKillstreak);
         }
     }
 
@@ -153,7 +153,7 @@ public class MongoProfileHandler implements IProfile {
                 Document layoutDoc = (Document) kitLayoutsDoc.get(kitName);
                 if (layoutDoc != null) {
                     ItemStack[] items = ItemStackSerializer.deserializeItemStackArray(layoutDoc.getString("items"));
-                    profile.getKitLayout().setLayout(kitName, items);
+                    profile.getKitLayoutData().setLayout(kitName, items);
                 }
             }
         } else {
@@ -168,7 +168,7 @@ public class MongoProfileHandler implements IProfile {
      */
     private void assignDefaultKitLayout(Profile profile) {
         for (Kit kit : Tulip.getInstance().getKitRepository().getKits()) {
-            profile.getKitLayout().setLayout(kit.getName(), kit.getItems());
+            profile.getKitLayoutData().setLayout(kit.getName(), kit.getItems());
         }
     }
 
@@ -176,25 +176,25 @@ public class MongoProfileHandler implements IProfile {
      * Convert stats to a document
      *
      * @param profile the profile to convert the stats to a document for
-     * @param ffaRepository the FFA repository
+     * @param gameRepository the FFA repository
      * @param killsMap the kills map
      * @param deathsMap the deaths map
      * @return the document
      */
-    private @NotNull Map<String, Integer> statsToDocument(Profile profile, FFARepository ffaRepository, Map<String, Integer> killsMap, Map<String, Integer> deathsMap) {
+    private @NotNull Map<String, Integer> statsToDocument(Profile profile, GameRepository gameRepository, Map<String, Integer> killsMap, Map<String, Integer> deathsMap) {
         Map<String, Integer> highestKillstreakMap = new HashMap<>();
 
-        for (AbstractFFAMatch match : ffaRepository.getMatches()) {
+        for (AbstractGame match : gameRepository.getMatches()) {
             Kit kit = match.getKit();
             String kitName = kit.getName();
 
-            Integer kills = profile.getStats().getKitKills().getOrDefault(kit, 0);
+            Integer kills = profile.getStatsData().getKitKills().getOrDefault(kit, 0);
             killsMap.put(kitName, kills);
 
-            Integer deaths = profile.getStats().getKitDeaths().getOrDefault(kit, 0);
+            Integer deaths = profile.getStatsData().getKitDeaths().getOrDefault(kit, 0);
             deathsMap.put(kitName, deaths);
 
-            Integer highestKillstreak = profile.getStats().getHighestKillstreak().getOrDefault(kit, 0);
+            Integer highestKillstreak = profile.getStatsData().getHighestKillstreak().getOrDefault(kit, 0);
             highestKillstreakMap.put(kitName, highestKillstreak);
         }
         return highestKillstreakMap;
@@ -212,7 +212,7 @@ public class MongoProfileHandler implements IProfile {
             String kitName = kit.getName();
 
             Document layoutDoc = new Document();
-            layoutDoc.put("items", ItemStackSerializer.serializeItemStackArray(profile.getKitLayout().getLayout(kitName)));
+            layoutDoc.put("items", ItemStackSerializer.serializeItemStackArray(profile.getKitLayoutData().getLayout(kitName)));
 
             kitLayoutsDoc.put(kitName, layoutDoc);
         }

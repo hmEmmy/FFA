@@ -1,7 +1,7 @@
 package me.emmy.tulip.visual.tablist.impl;
 
 import me.emmy.tulip.Tulip;
-import me.emmy.tulip.config.ConfigHandler;
+import me.emmy.tulip.config.ConfigService;
 import me.emmy.tulip.util.CC;
 import me.emmy.tulip.util.Logger;
 import me.emmy.tulip.visual.tablist.ITablist;
@@ -16,24 +16,24 @@ import java.util.stream.Collectors;
 
 /**
  * @author Emmy
- * @project Tulip
+ * @project FFA
  * @date 07/09/2024 - 15:16
  */
 public class TablistVisualizer implements ITablist {
 
     @Override
     public List<String> getHeader(Player player) {
-        return ConfigHandler.getInstance().getTablistConfig().getStringList("tablist.header");
+        return ConfigService.getInstance().getTablistConfig().getStringList("tablist.header");
     }
 
     @Override
     public List<String> getFooter(Player player) {
-        return ConfigHandler.getInstance().getTablistConfig().getStringList("tablist.footer");
+        return ConfigService.getInstance().getTablistConfig().getStringList("tablist.footer");
     }
 
     @Override
     public void update(Player player) {
-        if (Tulip.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getSettings().isShowTablist()) {
+        if (Tulip.getInstance().getProfileRepository().getProfile(player.getUniqueId()).getSettingsData().isShowTablist()) {
             List<String> headerLines = getHeader(player).stream()
                     .map(CC::translate)
                     .collect(Collectors.toList());
